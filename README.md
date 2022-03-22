@@ -49,7 +49,7 @@ gcloud alpha container hub mesh update \
     --membership ${CLUSTER}
 ```
 
-## Initiatilize RootSync + RepoSync repos
+## Initialize RootSync + RepoSync repos
 
 ```
 cat <<EOF > acm-config.yaml
