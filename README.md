@@ -79,10 +79,39 @@ gcloud alpha anthos config sync repo describe \
     --managed-resources all \
     --sync-name root-sync \
     --sync-namespace config-management-system
-gcloud alpha anthos config sync repo describe \
-    --managed-resources all \
-    --sync-name repo-sync \
-    --sync-namespace onlineboutique
+```
+```
+Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
+asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:03:21Z  INSTALLED          PENDING
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                        managed_resources                                         │
+├───────────────────────────┬─────────────┬────────────────┬────────────────┬─────────┬────────────┤
+│           GROUP           │     KIND    │      NAME      │   NAMESPACE    │  STATUS │ CONDITIONS │
+├───────────────────────────┼─────────────┼────────────────┼────────────────┼─────────┼────────────┤
+│                           │ Namespace   │ onlineboutique │                │ Current │            │
+│ configsync.gke.io         │ RepoSync    │ repo-sync      │ onlineboutique │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding │ repo-sync      │ onlineboutique │ Current │            │
+└───────────────────────────┴─────────────┴────────────────┴────────────────┴─────────┴────────────┘
+```
+
+## Deploy Policies
+
+```
+sed -i "s/init-reposync/deploy-policies/g" acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config acm-config.yaml
+```
+
+Checks:
+```
+gcloud beta container hub config-management status
+```
+```
+Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
+asm-acm-cluster-2  ERROR          f9969f0            main         2022-03-22T13:07:43Z  INSTALLED          PENDING
+ - cluster: asm-acm-cluster-2
+   error: KNV2009: failed to apply Namespace, /onlineboutique: admission webhook "validation.gatekeeper.sh" denied the request: [must-have-istio-sidecar-injection] you must provide labels: {"istio.io/rev"}
 ```
 
 ## Next deployments
@@ -100,6 +129,13 @@ sed -i "s/init-reposync/deploy-policies/g" acm-config.yaml
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
     --config acm-config.yaml
+```
+
+```
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name repo-sync \
+    --sync-namespace onlineboutique
 ```
 
 ## TODOs/FIXME
