@@ -1,0 +1,25 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata:
+  name: must-have-istio-sidecar-injection
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+    - apiGroups:
+      - ""
+      kinds:
+      - Namespace
+    excludedNamespaces:
+    - config-management-monitoring
+    - config-management-system
+    - default
+    - gatekeeper-system
+    - istio-system
+    - kube-node-lease
+    - kube-public
+    - kube-system
+  parameters:
+    labels:
+    - allowedRegex: (asm-managed|asm-managed-regular|asm-managed-rapid)
+      key: istio.io/rev
