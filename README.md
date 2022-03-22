@@ -45,6 +45,8 @@ asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:
 
 ## Deploy Policies
 
+Show 1 or 2 `Constraint` resources ("View on GitHub") and provide some explanations.
+
 ```
 sed -i "s/init-reposync/deploy-policies/g" acm-config.yaml
 gcloud beta container hub config-management apply \
@@ -64,6 +66,8 @@ asm-acm-cluster-2  ERROR          f9969f0            main         2022-03-22T13:
 ```
 
 ## Set ASM sidecar injection
+
+Show the snippet of the `label` and provide some explanations.
 
 ```
 sed -i "s/deploy-policies/set-asm-injection/g" acm-config.yaml
