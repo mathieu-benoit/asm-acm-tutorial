@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: onlineboutique
   labels:
-    name: onlineboutique
+    istio.io/rev: asm-managed

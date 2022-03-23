@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- namespace.yaml
-- repo-sync-role-binding.yaml
+- reposync-namespace.yaml
+- reposync-role-binding.yaml
 - reposync.yaml
 namespace: onlineboutique
