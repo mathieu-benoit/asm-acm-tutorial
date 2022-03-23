@@ -1,9 +1,22 @@
+Concepts leveraged/illustrated:
+- Config Sync (all Kubernetes manifests deployed by GitOps)
+- Policy Controller (4 `Constraints`)
+- Multi-repos: `RootSync` and `RepoSync`
+- Unstructured repo + `Kustomize`
+- Referential constraints
+- ASM MCP
+- `STRICT` Mesh mTLS
+- `AuthorizationPolicy`
+
+Questions:
+- Diagram? CS+PoCo+Namespaces+GH-repos
+
 ## Init variables
 
 ```
 PROJECT_ID=FIXME
 gcloud config set project $PROJECT_ID
-CLUSTER=onlineboutique-asm-samples
+CLUSTER=asm-acm-tutorial
 CLUSTER_ZONE=us-east4-a
 PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format='get(projectNumber)')
 ```
@@ -50,7 +63,7 @@ gcloud beta container hub config-management enable
 gcloud beta container hub config-management describe
 ```
 
-## Initialize RootSync + RepoSync repos
+## Initialize PoCo & ConfigSync (RootSync + RepoSync) repos
 
 ```
 cat <<EOF > acm-config.yaml
@@ -66,7 +79,7 @@ spec:
     syncRepo: https://github.com/mathieu-benoit/asm-acm-tutorial
     syncBranch: main
     secretType: none
-    policyDir: root-sync/deployments/init-reposync
+    policyDir: root-sync/init
 EOF
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \

@@ -7,6 +7,6 @@ spec:
   git:
     repo: https://github.com/mathieu-benoit/asm-acm-tutorial
     revision: HEAD
-    branch: main
+    branch: test
     dir: onlineboutique/init
     auth: none
