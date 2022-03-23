@@ -74,6 +74,11 @@ gcloud beta container hub config-management describe
 
 ## Initialize PoCo & ConfigSync (RootSync + RepoSync) repos
 
+Potential things we should show/explain/illustrate/callout in this section:
+- ASM MCP via Fleet API: https://cloud.google.com/service-mesh/docs/managed/auto-control-plane-with-fleet
+- Multi-repo with Config Sync: https://cloud.google.com/anthos-config-management/docs/how-to/namespace-repositories
+- Default policies library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
+
 ```
 cat <<EOF > $WORK_DIR/acm-config.yaml
 applySpecVersion: 1
@@ -94,6 +99,9 @@ gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
     --config $WORK_DIR/acm-config.yaml
 ```
+
+"Show in GitHub" snippet:
+- root-sync/init/repo-sync/reposync.yaml
 
 Checks:
 ```
@@ -151,12 +159,11 @@ getting 1 RepoSync and RootSync from asm-acm-tutorial-3
 └───────────────────────────┴──────────────────────┴────────────────┴────────────────┴─────────┴────────────┘
 ```
 
-Potential things we should show/explain/illustrate/callout in this section:
-- ASM MCP via Fleet API: https://cloud.google.com/service-mesh/docs/managed/auto-control-plane-with-fleet
-- Multi-repo with Config Sync: https://cloud.google.com/anthos-config-management/docs/how-to/namespace-repositories
-- Default policies library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
-
 ## Deploy Ingress Gateway and OnlineBoutique apps
+
+Potential things we should show/explain/illustrate/callout in this section:
+- Ingress Gateway: https://cloud.google.com/service-mesh/docs/gateways
+- OnlineBoutique: https://github.com/GoogleCloudPlatform/microservices-demo
 
 ```
 sed -i "s,root-sync/init,root-sync/deployments,g" $WORK_DIR/acm-config.yaml
@@ -188,11 +195,8 @@ Outputs:
 │                           │ Namespace            │ istio-system       │                │ Current │            │
 │                           │ Namespace            │ onlineboutique     │                │ Current │            │
 │                           │ Service              │ asm-ingressgateway │ asm-ingress    │ Current │            │
-│                           │ ServiceAccount       │ asm-ingressgateway │ asm-ingress    │ Current │            │
 │ apps                      │ Deployment           │ asm-ingressgateway │ asm-ingress    │ Current │            │
 │ networking.istio.io       │ Gateway              │ asm-ingressgateway │ asm-ingress    │ Current │            │
-│ security.istio.io         │ AuthorizationPolicy  │ asm-ingressgateway │ asm-ingress    │ Current │            │
-│ security.istio.io         │ AuthorizationPolicy  │ deny-all           │ asm-ingress    │ Current │            │
 │ mesh.cloud.google.com     │ ControlPlaneRevision │ asm-managed        │ istio-system   │ Current │            │
 │ configsync.gke.io         │ RepoSync             │ repo-sync          │ onlineboutique │ Current │            │
 │ rbac.authorization.k8s.io │ RoleBinding          │ repo-sync          │ onlineboutique │ Current │            │
@@ -235,9 +239,35 @@ From here, you could now browse the OnlineBoutique website by hitting the Ingres
 kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
 ```
 
-Potential things we should show/explain/illustrate/callout in this section:
-- FIXME
-
 ## Enforce ASM sidecar injection
 
+Potential things we should show/explain/illustrate/callout in this section:
+- ASM sidecar injection: https://cloud.google.com/service-mesh/docs/anthos-service-mesh-proxy-injection
+- ASM Control Plane revisions: https://cloud.google.com/service-mesh/docs/revisions-overview
+
+```
+sed -i "s,root-sync/init,root-sync/deployments,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+"Show in GitHub" snippet:
+- root-sync/enforce-sidecar-injection/namespace-sidecar-injection-label.yaml
+- root-sync/enforce-sidecar-injection/pod-sidecar-injection-annotation.yaml
+
+Checks:
+```
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name root-sync \
+    --sync-namespace config-management-system
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name repo-sync \
+    --sync-namespace onlineboutique
+```
+Outputs:
+```
 FIXME
+```
