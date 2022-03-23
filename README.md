@@ -8,6 +8,9 @@ Concepts leveraged/illustrated:
 - `STRICT` Mesh mTLS
 - `AuthorizationPolicy`
 
+TODO:
+- Take some wording on the approach from [this existing tutorial](https://cloud.google.com/anthos-config-management/docs/config-sync-quickstart). Something around _"Imagine that your compliance team is responsible for making sure that everyone in your organization is following internal rules. To enforce these rules, the compliance team has created configs, which they have added to the samples repository."_ 
+
 Questions:
 - Diagram? CS+PoCo+Namespaces+GH-repos
 
@@ -148,6 +151,11 @@ getting 1 RepoSync and RootSync from asm-acm-tutorial-3
 └───────────────────────────┴──────────────────────┴────────────────┴────────────────┴─────────┴────────────┘
 ```
 
+Potential things we should show/explain/illustrate/callout in this section:
+- ASM MCP via Fleet API: https://cloud.google.com/service-mesh/docs/managed/auto-control-plane-with-fleet
+- Multi-repo with Config Sync: https://cloud.google.com/anthos-config-management/docs/how-to/namespace-repositories
+- Default policies library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
+
 ## Deploy Ingress Gateway and OnlineBoutique apps
 
 ```
@@ -221,3 +229,15 @@ Outputs:
 │ networking.istio.io │ VirtualService │ frontend              │ onlineboutique │ Current │            │
 └─────────────────────┴────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
 ```
+
+From here, you could now browse the OnlineBoutique website by hitting the Ingress Gateway's public IP address:
+```
+kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
+```
+
+Potential things we should show/explain/illustrate/callout in this section:
+- FIXME
+
+## Enforce ASM sidecar injection
+
+FIXME
