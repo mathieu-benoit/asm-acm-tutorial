@@ -36,7 +36,8 @@ gcloud services enable \
 ```
 gcloud container clusters create ${CLUSTER} \
     --zone ${CLUSTER_ZONE} \
-    --machine-type=e2-standard-2 \
+    --machine-type=e2-standard-4 \
+    --num-nodes 4 \
     --workload-pool ${PROJECT_ID}.svc.id.goog \
     --labels mesh_id=proj-${PROJECT_NUMBER}
 ```
@@ -89,23 +90,37 @@ gcloud beta container hub config-management apply \
 Checks:
 ```
 gcloud beta container hub config-management status
+gcloud alpha container hub mesh describe
 gcloud alpha anthos config sync repo describe \
     --managed-resources all \
     --sync-name root-sync \
     --sync-namespace config-management-system
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name repo-sync \
+    --sync-namespace onlineboutique
 ```
 ```
 Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
 asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:03:21Z  INSTALLED          PENDING
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                        managed_resources                                         │
-├───────────────────────────┬─────────────┬────────────────┬────────────────┬─────────┬────────────┤
-│           GROUP           │     KIND    │      NAME      │   NAMESPACE    │  STATUS │ CONDITIONS │
-├───────────────────────────┼─────────────┼────────────────┼────────────────┼─────────┼────────────┤
-│                           │ Namespace   │ onlineboutique │                │ Current │            │
-│ configsync.gke.io         │ RepoSync    │ repo-sync      │ onlineboutique │ Current │            │
-│ rbac.authorization.k8s.io │ RoleBinding │ repo-sync      │ onlineboutique │ Current │            │
-└───────────────────────────┴─────────────┴────────────────┴────────────────┴─────────┴────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               managed_resources                                               │
+├───────────────────────────┬──────────────────────┬────────────────────┬────────────────┬─────────┬────────────┤
+│           GROUP           │         KIND         │        NAME        │   NAMESPACE    │  STATUS │ CONDITIONS │
+├───────────────────────────┼──────────────────────┼────────────────────┼────────────────┼─────────┼────────────┤
+│                           │ Namespace            │ asm-ingress        │                │ Current │            │
+│                           │ Namespace            │ istio-system       │                │ Current │            │
+│                           │ Namespace            │ onlineboutique     │                │ Current │            │
+│                           │ Service              │ asm-ingressgateway │ asm-ingress    │ Current │            │
+│                           │ ServiceAccount       │ asm-ingressgateway │ asm-ingress    │ Current │            │
+│ apps                      │ Deployment           │ asm-ingressgateway │ asm-ingress    │ Current │            │
+│ networking.istio.io       │ Gateway              │ asm-ingressgateway │ asm-ingress    │ Current │            │
+│ security.istio.io         │ AuthorizationPolicy  │ asm-ingressgateway │ asm-ingress    │ Current │            │
+│ security.istio.io         │ AuthorizationPolicy  │ deny-all           │ asm-ingress    │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision │ asm-managed        │ istio-system   │ Current │            │
+│ configsync.gke.io         │ RepoSync             │ repo-sync          │ onlineboutique │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding          │ repo-sync          │ onlineboutique │ Current │            │
+└───────────────────────────┴──────────────────────┴────────────────────┴────────────────┴─────────┴────────────┘
 ```
 
 ## Deploy Policies
@@ -113,7 +128,7 @@ asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:
 Show 1 or 2 `Constraint` resources ("View on GitHub") and provide some explanations.
 
 ```
-sed -i "s/init-reposync/deploy-policies/g" acm-config.yaml
+sed -i "s,root-sync/init,root-sync/init,g" acm-config.yaml
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
     --config acm-config.yaml
