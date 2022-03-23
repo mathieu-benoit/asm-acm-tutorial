@@ -14,6 +14,11 @@ Questions:
 ## Init variables
 
 ```
+WORK_DIR=~/asm-acm-tutorial-dir
+mkdir $WORK_DIR
+```
+
+```
 PROJECT_ID=FIXME
 gcloud config set project $PROJECT_ID
 CLUSTER=asm-acm-tutorial
@@ -67,7 +72,7 @@ gcloud beta container hub config-management describe
 ## Initialize PoCo & ConfigSync (RootSync + RepoSync) repos
 
 ```
-cat <<EOF > acm-config.yaml
+cat <<EOF > $WORK_DIR/acm-config.yaml
 applySpecVersion: 1
 spec:
   policyController:
@@ -84,13 +89,76 @@ spec:
 EOF
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
-    --config acm-config.yaml
+    --config $WORK_DIR/acm-config.yaml
 ```
 
 Checks:
 ```
 gcloud beta container hub config-management status
 gcloud alpha container hub mesh describe
+gcloud alpha anthos config sync repo list
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name root-sync \
+    --sync-namespace config-management-system
+```
+Outputs:
+```
+Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
+asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:03:21Z  INSTALLED          PENDING
+...
+createTime: '2022-03-19T15:20:16.653593277Z'
+membershipStates:
+  projects/454838580268/locations/global/memberships/asm-acm-tutorial-3:
+    servicemesh:
+      controlPlaneManagement:
+        state: DISABLED
+    state:
+      code: OK
+      description: 'Revision(s) ready for use: asm-managed.'
+      updateTime: '2022-03-23T16:30:47.216630490Z'
+name: projects/mabenoit-asm-acm/locations/global/features/servicemesh
+resourceState:
+  state: ACTIVE
+spec: {}
+state:
+  servicemesh: {}
+  state: {}
+updateTime: '2022-03-23T16:30:53.359173436Z'
+...
+getting 2 RepoSync and RootSync from asm-acm-tutorial-3
+┌───────────────────────────────────────────────────────────────────────────────────┬───────┬────────┬─────────┬───────┬─────────┬─────────────┐
+│                                       SOURCE                                      │ TOTAL │ SYNCED │ PENDING │ ERROR │ STALLED │ RECONCILING │
+├───────────────────────────────────────────────────────────────────────────────────┼───────┼────────┼─────────┼───────┼─────────┼─────────────┤
+│ https://github.com/mathieu-benoit/asm-acm-tutorial//root-sync/init@main           │ 1     │ 1      │ 0       │ 0     │ 0       │ 0           │
+│ https://github.com/mathieu-benoit/asm-acm-tutorial//onlineboutique/init@main:HEAD │ 1     │ 1      │ 0       │ 0     │ 0       │ 0           │
+└───────────────────────────────────────────────────────────────────────────────────┴───────┴────────┴─────────┴───────┴─────────┴─────────────┘
+...
+getting 1 RepoSync and RootSync from asm-acm-tutorial-3
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                             managed_resources                                             │
+├───────────────────────────┬──────────────────────┬────────────────┬────────────────┬─────────┬────────────┤
+│           GROUP           │         KIND         │      NAME      │   NAMESPACE    │  STATUS │ CONDITIONS │
+├───────────────────────────┼──────────────────────┼────────────────┼────────────────┼─────────┼────────────┤
+│                           │ Namespace            │ istio-system   │                │ Current │            │
+│                           │ Namespace            │ onlineboutique │                │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision │ asm-managed    │ istio-system   │ Current │            │
+│ configsync.gke.io         │ RepoSync             │ repo-sync      │ onlineboutique │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding          │ repo-sync      │ onlineboutique │ Current │            │
+└───────────────────────────┴──────────────────────┴────────────────┴────────────────┴─────────┴────────────┘
+```
+
+## Deploy Ingress Gateway and OnlineBoutique apps
+
+```
+sed -i "s,root-sync/init,root-sync/deployments,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+Checks:
+```
 gcloud alpha anthos config sync repo describe \
     --managed-resources all \
     --sync-name root-sync \
@@ -100,9 +168,9 @@ gcloud alpha anthos config sync repo describe \
     --sync-name repo-sync \
     --sync-namespace onlineboutique
 ```
+Outputs:
 ```
-Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
-asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:03:21Z  INSTALLED          PENDING
+...
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                               managed_resources                                               │
 ├───────────────────────────┬──────────────────────┬────────────────────┬────────────────┬─────────┬────────────┤
@@ -121,85 +189,35 @@ asm-acm-cluster-2  SYNCED         f9969f0            main         2022-03-22T13:
 │ configsync.gke.io         │ RepoSync             │ repo-sync          │ onlineboutique │ Current │            │
 │ rbac.authorization.k8s.io │ RoleBinding          │ repo-sync          │ onlineboutique │ Current │            │
 └───────────────────────────┴──────────────────────┴────────────────────┴────────────────┴─────────┴────────────┘
-```
-
-## Deploy Policies
-
-Show 1 or 2 `Constraint` resources ("View on GitHub") and provide some explanations.
-
-```
-sed -i "s,root-sync/init,root-sync/init,g" acm-config.yaml
-gcloud beta container hub config-management apply \
-    --membership ${CLUSTER} \
-    --config acm-config.yaml
-```
-
-Checks:
-```
-gcloud beta container hub config-management status
-```
-```
-Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
-asm-acm-cluster-2  ERROR          f9969f0            main         2022-03-22T13:07:43Z  INSTALLED          PENDING
- - cluster: asm-acm-cluster-2
-   error: KNV2009: failed to apply Namespace, /onlineboutique: admission webhook "validation.gatekeeper.sh" denied the request: [must-have-istio-sidecar-injection] you must provide labels: {"istio.io/rev"}
-```
-
-## Set ASM sidecar injection
-
-Show the snippet of the `label` and provide some explanations.
-
-```
-sed -i "s/deploy-policies/set-asm-injection/g" acm-config.yaml
-gcloud beta container hub config-management apply \
-    --membership ${CLUSTER} \
-    --config acm-config.yaml
-```
-
-Checks:
-```
-gcloud beta container hub config-management status
-gcloud alpha anthos config sync repo describe \
-    --managed-resources all \
-    --sync-name root-sync \
-    --sync-namespace config-management-system
-```
-```
-Name               Status         Last_Synced_Token  Sync_Branch  Last_Synced_Time      Policy_Controller  Hierarchy_Controller
-asm-acm-cluster-2  SYNCED         bade531            main         2022-03-22T13:13:32Z  INSTALLED          PENDING
-┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                         managed_resources                                                         │
-├───────────────────────────┬───────────────────────────┬───────────────────────────────────┬────────────────┬─────────┬────────────┤
-│           GROUP           │            KIND           │                NAME               │   NAMESPACE    │  STATUS │ CONDITIONS │
-├───────────────────────────┼───────────────────────────┼───────────────────────────────────┼────────────────┼─────────┼────────────┤
-│                           │ Namespace                 │ onlineboutique                    │                │ Current │            │
-│ constraints.gatekeeper.sh │ AllowedServicePortName    │ port-name-constraint              │                │ Current │            │
-│ constraints.gatekeeper.sh │ DestinationRuleTLSEnabled │ destination-rules-tls-enabled     │                │ Current │            │
-│ constraints.gatekeeper.sh │ K8sRequiredLabels         │ must-have-istio-sidecar-injection │                │ Current │            │
-│ constraints.gatekeeper.sh │ PolicyStrictOnly          │ policy-strict-only                │                │ Current │            │
-│ configsync.gke.io         │ RepoSync                  │ repo-sync                         │ onlineboutique │ Current │            │
-│ rbac.authorization.k8s.io │ RoleBinding               │ repo-sync                         │ onlineboutique │ Current │            │
-└───────────────────────────┴───────────────────────────┴───────────────────────────────────┴────────────────┴─────────┴────────────┘
-```
-
-## Next deployments
-
-- Ingress Gateway
-- mTLS STRICT
-- OnlineBoutique deployments
-- OnlineBoutique sidecar injection label
-- OnlineBoutique authzpol
-
-```
-sed -i "s/init-reposync/deploy-policies/g" acm-config.yaml
-gcloud beta container hub config-management apply \
-    --membership ${CLUSTER} \
-    --config acm-config.yaml
-```
-
-```
-gcloud alpha anthos config sync repo describe \
-    --managed-resources all \
-    --sync-name repo-sync \
-    --sync-namespace onlineboutique
+...
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                          managed_resources                                           │
+├─────────────────────┬────────────────┬───────────────────────┬────────────────┬─────────┬────────────┤
+│        GROUP        │      KIND      │          NAME         │   NAMESPACE    │  STATUS │ CONDITIONS │
+├─────────────────────┼────────────────┼───────────────────────┼────────────────┼─────────┼────────────┤
+│                     │ Service        │ adservice             │ onlineboutique │ Current │            │
+│                     │ Service        │ cartservice           │ onlineboutique │ Current │            │
+│                     │ Service        │ checkoutservice       │ onlineboutique │ Current │            │
+│                     │ Service        │ currencyservice       │ onlineboutique │ Current │            │
+│                     │ Service        │ emailservice          │ onlineboutique │ Current │            │
+│                     │ Service        │ frontend              │ onlineboutique │ Current │            │
+│                     │ Service        │ paymentservice        │ onlineboutique │ Current │            │
+│                     │ Service        │ productcatalogservice │ onlineboutique │ Current │            │
+│                     │ Service        │ recommendationservice │ onlineboutique │ Current │            │
+│                     │ Service        │ redis-cart            │ onlineboutique │ Current │            │
+│                     │ Service        │ shippingservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ adservice             │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ cartservice           │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ checkoutservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ currencyservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ emailservice          │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ frontend              │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ loadgenerator         │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ paymentservice        │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ productcatalogservice │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ recommendationservice │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ redis-cart            │ onlineboutique │ Current │            │
+│ apps                │ Deployment     │ shippingservice       │ onlineboutique │ Current │            │
+│ networking.istio.io │ VirtualService │ frontend              │ onlineboutique │ Current │            │
+└─────────────────────┴────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
 ```
