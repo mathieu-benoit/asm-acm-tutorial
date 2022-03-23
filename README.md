@@ -1,3 +1,55 @@
+## Init variables
+
+```
+PROJECT_ID=FIXME
+gcloud config set project $PROJECT_ID
+CLUSTER=onlineboutique-asm-samples
+CLUSTER_ZONE=us-east4-a
+PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format='get(projectNumber)')
+```
+
+## Enable APIs
+
+```
+gcloud services enable \
+    container.googleapis.com \
+    gkehub.googleapis.com \
+    mesh.googleapis.com \
+    anthos.googleapis.com
+```
+
+## Create cluster
+
+```
+gcloud container clusters create ${CLUSTER} \
+    --zone ${CLUSTER_ZONE} \
+    --machine-type=e2-standard-2 \
+    --workload-pool ${PROJECT_ID}.svc.id.goog \
+    --labels mesh_id=proj-${PROJECT_NUMBER}
+```
+
+## Add cluster in Fleet
+
+```
+gcloud container hub memberships register ${CLUSTER} \
+    --gke-cluster ${CLUSTER_ZONE}/${CLUSTER} \
+    --enable-workload-identity
+```
+
+## Enable ASM
+
+```
+gcloud beta container hub mesh enable
+gcloud alpha container hub mesh describe
+```
+
+## Enable ACM
+
+```
+gcloud beta container hub config-management enable
+gcloud beta container hub config-management describe
+```
+
 ## Initialize RootSync + RepoSync repos
 
 ```
