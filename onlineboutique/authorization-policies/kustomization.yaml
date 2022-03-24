@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - ../init
 components:
-- github.com/GoogleCloudPlatform/anthos-service-mesh-samples/demos/online-boutique-asm-manifests/service-accounts/all?ref=asm-acm-tutorial
-- github.com/GoogleCloudPlatform/anthos-service-mesh-samples/demos/online-boutique-asm-manifests/authorization-policies/all?ref=asm-acm-tutorial
+- github.com/GoogleCloudPlatform/anthos-service-mesh-samples/docs/online-boutique-asm-manifests/service-accounts/all?ref=asm-acm-tutorial
+- github.com/GoogleCloudPlatform/anthos-service-mesh-samples/docs/online-boutique-asm-manifests/authorization-policies/all?ref=asm-acm-tutorial
 - for-ingress-gateway
 namespace: onlineboutique
