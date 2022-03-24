@@ -310,7 +310,35 @@ gcloud beta container hub config-management apply \
 ```
 
 "Show in GitHub" snippet:
-- FIXME
+- root-sync/enforce-strict-mtls/gatekeeper-system/config-referential-constraints.yaml
+- root-sync/enforce-strict-mtls/policies/mesh-level-strict-mtls.yaml
+
+Because we haven't set up yet mTLS `STRICT` in our Mesh, running the command below will tell us about this violation:
+```
+kubectl get meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls -ojsonpath='{.status.violations}'  | jq
+```
+Output:
+```
+[
+  {
+    "enforcementAction": "deny",
+    "kind": "MeshLevelStrictMtls",
+    "message": "Root namespace <istio-system> does not have a strict mTLS PeerAuthentication",
+    "name": "mesh-level-strict-mtls"
+  }
+]
+```
+
+Let's fix this issue by actually deploying a `PeerAuthentication` in the `istio-system` in order to give mTLS `STRICT` to the entire Mesh:
+```
+sed -i "s,root-sync/enforce-strict-mtls,root-sync/fix-strict-mtls,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+"Show in GitHub" snippet:
+- istio-system/PeerAuthentication
 
 Checks:
 ```
@@ -348,6 +376,19 @@ Outputs:
 │ configsync.gke.io         │ RepoSync                      │ repo-sync                         │ onlineboutique    │ Current │            │
 │ rbac.authorization.k8s.io │ RoleBinding                   │ repo-sync                         │ onlineboutique    │ Current │            │
 └───────────────────────────┴───────────────────────────────┴───────────────────────────────────┴───────────────────┴─────────┴────────────┘
+...
+NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+destinationruletlsenabled.constraints.gatekeeper.sh/destination-rule-tls-enabled   deny                 
+NAME                                                                   ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls   deny                 0
+NAME                                                                                    ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+peerauthenticationstrictmtls.constraints.gatekeeper.sh/peerauthentication-strict-mtls   deny                 0
+NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+k8srequiredlabels.constraints.gatekeeper.sh/namespace-sidecar-injection-label   deny                 0
+NAME                                                                                       ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+podsidecarinjectionannotation.constraints.gatekeeper.sh/pod-sidecar-injection-annotation   deny                 0
 ```
 
 ## Enforce AuthorizationPolicies
+
+FIXME
