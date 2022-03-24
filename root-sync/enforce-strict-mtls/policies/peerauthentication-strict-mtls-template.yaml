@@ -19,7 +19,6 @@ spec:
       valid_modes := {"UNSET", "STRICT"}
       # mTLS mode can only be set to either UNSET or STRICT for all PeerAuthentications in the mesh.
       violation[{"msg": msg}] {
-          has_strictness_set_to_high
           is_peerauthentication(input.review.kind)
           count({spec.mtls.mode} - valid_modes) > 0
           msg := "PeerAuthentication mtls mode can only be set to UNSET or STRICT"
