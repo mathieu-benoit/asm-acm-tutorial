@@ -26,7 +26,6 @@ spec:
       }
       # port level mtls
       violation[{"msg": msg}] {
-          input.parameters.strictnessLevel == "High"
           is_peerauthentication(input.review.kind)
           count({spec.portLevelMtls[port].mode} - valid_modes) > 0
           msg := sprintf("PeerAuthentication port <%v> has invalid mtls mode <%v>, it can only be set to UNSET or STRICT", [port, spec.portLevelMtls[port].mode])
