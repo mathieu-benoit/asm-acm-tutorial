@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  annotations:
+    description: "In the ASM root namespace, there should be a strict mTLS PeerAuthentication."
+  name: meshlevelstrictmtls
+spec:
+  crd:
+    spec:
+      names:
+        kind: MeshLevelStrictMtls
+      validation:
+        legacySchema: true
+        openAPIV3Schema: {}
+  targets:
+  - rego: |-
+      package asm.security.peerauthentication
+      violation[{"msg": msg}] {
+        root_ns := object.get(object.get(input, "parameters", {}), "rootNamespace", "istio-system")
+        not namespace_has_default_strict_mtls_pa(root_ns)
+        msg := sprintf("Root namespace <%v> does not have a strict mTLS PeerAuthentication", [root_ns])
+      }
+      namespace_has_default_strict_mtls_pa(ns) {
+        pa := data.inventory.namespace[ns][_].PeerAuthentication[_]
+        pa.spec.mtls.mode == "STRICT"
+      }
+    target: admission.k8s.gatekeeper.sh

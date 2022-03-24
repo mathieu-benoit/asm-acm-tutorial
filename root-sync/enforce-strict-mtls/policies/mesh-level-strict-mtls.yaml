@@ -1,0 +1,18 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: MeshLevelStrictMtls
+metadata:
+  name: mesh-level-strict-mtls
+spec:
+  enforcementAction: deny
+  match:
+    excludedNamespaces:
+    - config-management-monitoring
+    - config-management-system
+    - default
+    - gatekeeper-system
+    - gke-connect
+    - istio-system
+    - kube-node-lease
+    - kube-public
+    - kube-system
+    - resource-group-system

@@ -244,6 +244,8 @@ kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBala
 Potential things we should show/explain/illustrate/callout in this section:
 - ASM sidecar injection: https://cloud.google.com/service-mesh/docs/anthos-service-mesh-proxy-injection
 - ASM Control Plane revisions: https://cloud.google.com/service-mesh/docs/revisions-overview
+- Policy Controller: FIXME
+- Enforcing `Constratints`: FIXME
 
 ```
 sed -i "s,root-sync/deployments,root-sync/enforce-sidecar-injection,g" $WORK_DIR/acm-config.yaml
@@ -296,4 +298,29 @@ We could see that for the 2 `Constraint` resources deployed we have 0 `TOTAL-VIO
 
 ## Enforce STRICT mTLS in the Mesh
 
+Potential things we should show/explain/illustrate/callout in this section:
+- mTLS STRICT: FIXME
+- Referrential constraints: FIXME
+
+```
+sed -i "s,root-sync/enforce-sidecar-injection,root-sync/enforce-strict-mtls,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+"Show in GitHub" snippet:
+- FIXME
+
+Checks:
+```
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name root-sync \
+    --sync-namespace config-management-system
+kubectl get constraints
+```
+Outputs:
+```
 FIXME
+```

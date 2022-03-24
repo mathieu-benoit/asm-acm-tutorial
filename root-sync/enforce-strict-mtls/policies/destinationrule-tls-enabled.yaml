@@ -1,12 +1,12 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: PolicyStrictOnly
+kind: DestinationRuleTLSEnabled
 metadata:
-  name: policy-strict-only
+  name: destination-rule-tls-enabled
 spec:
   enforcementAction: deny
   match:
     kinds:
     - apiGroups:
-      - security.istio.io
+      - networking.istio.io
       kinds:
-      - PeerAuthentication
+      - DestinationRule
