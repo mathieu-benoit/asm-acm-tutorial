@@ -5,6 +5,11 @@ metadata:
 spec:
   enforcementAction: deny
   match:
+    kinds:
+    - apiGroups:
+      - ""
+      kinds:
+      - Namespace
     excludedNamespaces:
     - config-management-monitoring
     - config-management-system
