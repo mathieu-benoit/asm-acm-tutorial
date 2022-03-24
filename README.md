@@ -262,12 +262,38 @@ gcloud alpha anthos config sync repo describe \
     --managed-resources all \
     --sync-name root-sync \
     --sync-namespace config-management-system
-gcloud alpha anthos config sync repo describe \
-    --managed-resources all \
-    --sync-name repo-sync \
-    --sync-namespace onlineboutique
+kubectl get constraints
 ```
 Outputs:
 ```
-FIXME
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                           managed_resources                                                           │
+├───────────────────────────┬───────────────────────────────┬───────────────────────────────────┬────────────────┬─────────┬────────────┤
+│           GROUP           │              KIND             │                NAME               │   NAMESPACE    │  STATUS │ CONDITIONS │
+├───────────────────────────┼───────────────────────────────┼───────────────────────────────────┼────────────────┼─────────┼────────────┤
+│                           │ Namespace                     │ asm-ingress                       │                │ Current │            │
+│                           │ Namespace                     │ istio-system                      │                │ Current │            │
+│                           │ Namespace                     │ onlineboutique                    │                │ Current │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels             │ namespace-sidecar-injection-label │                │ Current │            │
+│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation │ pod-sidecar-injection-annotation  │                │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate            │ podsidecarinjectionannotation     │                │ Current │            │
+│                           │ Service                       │ asm-ingressgateway                │ asm-ingress    │ Current │            │
+│ apps                      │ Deployment                    │ asm-ingressgateway                │ asm-ingress    │ Current │            │
+│ networking.istio.io       │ Gateway                       │ asm-ingressgateway                │ asm-ingress    │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision          │ asm-managed                       │ istio-system   │ Current │            │
+│ configsync.gke.io         │ RepoSync                      │ repo-sync                         │ onlineboutique │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding                   │ repo-sync                         │ onlineboutique │ Current │            │
+└───────────────────────────┴───────────────────────────────┴───────────────────────────────────┴────────────────┴─────────┴────────────┘
+...
+NAME                                                                                       ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+podsidecarinjectionannotation.constraints.gatekeeper.sh/pod-sidecar-injection-annotation   deny                 0
+
+NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+k8srequiredlabels.constraints.gatekeeper.sh/namespace-sidecar-injection-label   deny                 0
 ```
+
+We could see that for the 2 `Constraint` resources deployed we have 0 `TOTAL-VIOLATIONS`.
+
+## Enforce STRICT mTLS in the Mesh
+
+FIXME
