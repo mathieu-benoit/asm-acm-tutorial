@@ -322,7 +322,32 @@ kubectl get constraints
 ```
 Outputs:
 ```
-FIXME
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                            managed_resources                                                             │
+├───────────────────────────┬───────────────────────────────┬───────────────────────────────────┬───────────────────┬─────────┬────────────┤
+│           GROUP           │              KIND             │                NAME               │     NAMESPACE     │  STATUS │ CONDITIONS │
+├───────────────────────────┼───────────────────────────────┼───────────────────────────────────┼───────────────────┼─────────┼────────────┤
+│                           │ Namespace                     │ asm-ingress                       │                   │ Current │            │
+│                           │ Namespace                     │ gatekeeper-system                 │                   │ Current │            │
+│                           │ Namespace                     │ istio-system                      │                   │ Current │            │
+│                           │ Namespace                     │ onlineboutique                    │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DestinationRuleTlsEnabled     │ destination-rule-tls-enabled      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels             │ namespace-sidecar-injection-label │                   │ Current │            │
+│ constraints.gatekeeper.sh │ MeshLevelStrictMtls           │ mesh-level-strict-mtls            │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PeerAuthenticationStrictMtls  │ peerauthentication-strict-mtls    │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation │ pod-sidecar-injection-annotation  │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate            │ destinationruletlsenabled         │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate            │ meshlevelstrictmtls               │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate            │ peerauthenticationstrictmtls      │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate            │ podsidecarinjectionannotation     │                   │ Current │            │
+│                           │ Service                       │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ apps                      │ Deployment                    │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ networking.istio.io       │ Gateway                       │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ config.gatekeeper.sh      │ Config                        │ config                            │ gatekeeper-system │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision          │ asm-managed                       │ istio-system      │ Current │            │
+│ configsync.gke.io         │ RepoSync                      │ repo-sync                         │ onlineboutique    │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding                   │ repo-sync                         │ onlineboutique    │ Current │            │
+└───────────────────────────┴───────────────────────────────┴───────────────────────────────────┴───────────────────┴─────────┴────────────┘
 ```
 
 ## Enforce AuthorizationPolicies
