@@ -244,8 +244,8 @@ kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBala
 Potential things we should show/explain/illustrate/callout in this section:
 - ASM sidecar injection: https://cloud.google.com/service-mesh/docs/anthos-service-mesh-proxy-injection
 - ASM Control Plane revisions: https://cloud.google.com/service-mesh/docs/revisions-overview
-- Policy Controller: FIXME
-- Enforcing `Constratints`: FIXME
+- Policy Controller: https://cloud.google.com/anthos-config-management/docs/concepts/policy-controller
+- Enforcing policies by creating `Constraints`: https://cloud.google.com/anthos-config-management/docs/how-to/creating-constraints
 
 ```
 sed -i "s,root-sync/deployments,root-sync/enforce-sidecar-injection,g" $WORK_DIR/acm-config.yaml
@@ -299,8 +299,8 @@ We could see that for the 2 `Constraint` resources deployed we have 0 `TOTAL-VIO
 ## Enforce STRICT mTLS in the Mesh
 
 Potential things we should show/explain/illustrate/callout in this section:
-- mTLS STRICT: FIXME
-- Referrential constraints: FIXME
+- mTLS STRICT: https://cloud.google.com/service-mesh/docs/security/security-overview#mutual_tls
+- Referrential constraints: https://cloud.google.com/anthos-config-management/docs/how-to/creating-constraints#gatekeeper-config
 
 ```
 sed -i "s,root-sync/enforce-sidecar-injection,root-sync/enforce-strict-mtls,g" $WORK_DIR/acm-config.yaml
@@ -340,6 +340,11 @@ gcloud beta container hub config-management apply \
 "Show in GitHub" snippet:
 - istio-system/PeerAuthentication
 
+To complete this `MeshLevelStrictMtls` `Constraint` just deployed and in order to make sure no one in your Mesh overrides this mTLS `STRICT` setup, two more `Constraints` have been deployed too:
+"Show in GitHub" snippet:
+- root-sync/enforce-strict-mtls/policies/destinationrule-tls-enabled.yaml
+- root-sync/enforce-strict-mtls/policies/peerauthentication-strict-mtls.yaml
+
 Checks:
 ```
 gcloud alpha anthos config sync repo describe \
@@ -373,6 +378,7 @@ Outputs:
 │ networking.istio.io       │ Gateway                       │ asm-ingressgateway                │ asm-ingress       │ Current │            │
 │ config.gatekeeper.sh      │ Config                        │ config                            │ gatekeeper-system │ Current │            │
 │ mesh.cloud.google.com     │ ControlPlaneRevision          │ asm-managed                       │ istio-system      │ Current │            │
+│ security.istio.io         │ PeerAuthentication            │ default                           │ istio-system      │ Current │            │
 │ configsync.gke.io         │ RepoSync                      │ repo-sync                         │ onlineboutique    │ Current │            │
 │ rbac.authorization.k8s.io │ RoleBinding                   │ repo-sync                         │ onlineboutique    │ Current │            │
 └───────────────────────────┴───────────────────────────────┴───────────────────────────────────┴───────────────────┴─────────┴────────────┘
