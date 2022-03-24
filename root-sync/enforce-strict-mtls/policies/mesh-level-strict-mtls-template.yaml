@@ -16,9 +16,14 @@ spec:
   - rego: |-
       package asm.security.peerauthentication
       violation[{"msg": msg}] {
+        is_asm_peer_authn_mesh_strict_mtls(input.review.kind)
         root_ns := object.get(object.get(input, "parameters", {}), "rootNamespace", "istio-system")
         not namespace_has_default_strict_mtls_pa(root_ns)
         msg := sprintf("Root namespace <%v> does not have a strict mTLS PeerAuthentication", [root_ns])
+      }
+      is_asm_peer_authn_mesh_strict_mtls(kind) {
+        kind.kind == "MeshLevelStrictMtls"
+        kind.group == "constraints.gatekeeper.sh"
       }
       namespace_has_default_strict_mtls_pa(ns) {
         pa := data.inventory.namespace[ns][_].PeerAuthentication[_]
