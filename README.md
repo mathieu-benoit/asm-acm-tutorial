@@ -11,8 +11,9 @@ Concepts leveraged/illustrated:
 TODO:
 - Take some wording on the approach from [this existing tutorial](https://cloud.google.com/anthos-config-management/docs/config-sync-quickstart). Something around _"Imagine that your compliance team is responsible for making sure that everyone in your organization is following internal rules. To enforce these rules, the compliance team has created configs, which they have added to the samples repository."_ 
 
-Questions:
-- Diagram? CS+PoCo+Namespaces+GH-repos
+Question, what about a diagram to show an overview of the setup and the components? CS+PoCo+Namespaces+GH-repos, something like this (very roughtly):
+![Tutorial overview](imgs/overview.png)
+
 
 ## Init variables
 
@@ -238,6 +239,9 @@ From here, you could now browse the OnlineBoutique website by hitting the Ingres
 ```
 kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
 ```
+
+If you go through the Anthos > Service Mesh > Topology page in the Google Cloud console, you will see this:
+![ASM Topology with Ingress Gateway and OnlineBoutique apps](imgs/asm-topology.png)
 
 ## Enforce ASM sidecar injection
 
