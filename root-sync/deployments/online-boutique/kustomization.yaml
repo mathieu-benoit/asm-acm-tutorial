@@ -7,4 +7,4 @@ patchesJson6902:
   patch: |-
     - op: replace
       path: /spec/git/dir
-      value: onlineboutique/deployments
+      value: online-boutique/deployments

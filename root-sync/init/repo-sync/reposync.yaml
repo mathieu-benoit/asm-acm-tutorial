@@ -8,5 +8,5 @@ spec:
     repo: https://github.com/mathieu-benoit/asm-acm-tutorial
     revision: HEAD
     branch: main
-    dir: onlineboutique/init
+    dir: online-boutique/init
     auth: none

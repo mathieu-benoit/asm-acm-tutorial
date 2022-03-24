@@ -4,4 +4,4 @@ resources:
 - ../init
 - ingress-gateway
 components:
-- onlineboutique
+- online-boutique
