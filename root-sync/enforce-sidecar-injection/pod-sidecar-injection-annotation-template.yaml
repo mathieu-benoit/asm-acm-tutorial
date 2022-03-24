@@ -15,9 +15,10 @@ spec:
   targets:
   - rego: |-
       package asm.security.workloadpolicy
+      resource = input.review.object
+      spec = resource.spec
       forbidden_injection_annotation := {"key": "sidecar.istio.io/inject", "value": "false"}
       violation[{"msg": msg}] {
-          has_strictness_set_to_high
           is_pod(input.review.kind)
           contains(resource.metadata.annotations[forbidden_injection_annotation["key"]], forbidden_injection_annotation["value"])
           msg := sprintf("The annotation %v: %v should not be applied on workload pods", [forbidden_injection_annotation["key"], forbidden_injection_annotation["value"]])

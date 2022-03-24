@@ -246,7 +246,7 @@ Potential things we should show/explain/illustrate/callout in this section:
 - ASM Control Plane revisions: https://cloud.google.com/service-mesh/docs/revisions-overview
 
 ```
-sed -i "s,root-sync/init,root-sync/deployments,g" $WORK_DIR/acm-config.yaml
+sed -i "s,root-sync/deployments,root-sync/enforce-sidecar-injection,g" $WORK_DIR/acm-config.yaml
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
     --config $WORK_DIR/acm-config.yaml
