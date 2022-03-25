@@ -11,3 +11,6 @@ spec:
       - group: "security.istio.io"
         version: "v1beta1"
         kind: "PeerAuthentication"
+      - group: "security.istio.io"
+        version: "v1beta1"
+        kind: "AuthorizationPolicy"

@@ -14,7 +14,6 @@ TODO:
 Question, what about a diagram to show an overview of the setup and the components? CS+PoCo+Namespaces+GH-repos, something like this (very roughtly):
 ![Tutorial overview](imgs/overview.png)
 
-
 ## Init variables
 
 ```
@@ -401,4 +400,51 @@ podsidecarinjectionannotation.constraints.gatekeeper.sh/pod-sidecar-injection-an
 
 ## Enforce AuthorizationPolicies
 
-FIXME
+Potential things we should show/explain/illustrate/callout in this section:
+- AuthorizationPolicies: FIXME
+
+```
+sed -i "s,root-sync/fix-strict-mtls,root-sync/enforce-authorization-policies,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+"Show in GitHub" snippet:
+- FIXME
+
+Because we haven't set up yet mTLS `STRICT` in our Mesh, running the command below will tell us about this violation:
+```
+kubectl get meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls -ojsonpath='{.status.violations}'  | jq
+```
+Output:
+```
+[
+  {
+    "enforcementAction": "deny",
+    "kind": "MeshLevelStrictMtls",
+    "message": "Root namespace <istio-system> does not have a strict mTLS PeerAuthentication",
+    "name": "mesh-level-strict-mtls"
+  }
+]
+```
+
+Let's fix this issue by actually deploying a `PeerAuthentication` in the `istio-system` in order to give mTLS `STRICT` to the entire Mesh:
+```
+sed -i "s,root-sync/enforce-strict-mtls,root-sync/fix-strict-mtls,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
+
+"Show in GitHub" snippet:
+- istio-system/PeerAuthentication
+
+To complete this `MeshLevelStrictMtls` `Constraint` just deployed and in order to make sure no one in your Mesh overrides this mTLS `STRICT` setup, two more `Constraints` have been deployed too:
+"Show in GitHub" snippet:
+- root-sync/enforce-strict-mtls/policies/destinationrule-tls-enabled.yaml
+
+## More resources
+
+- Constraint template library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
+- From edge to mesh: Exposing service mesh applications through GKE Ingress: https://cloud.google.com/architecture/exposing-service-mesh-apps-through-gke-ingress
