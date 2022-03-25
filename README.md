@@ -411,25 +411,25 @@ gcloud beta container hub config-management apply \
 ```
 
 "Show in GitHub" snippet:
-- FIXME
+- root-sync/enforce-authorization-policies/policies/default-deny-authorization-policies.yaml
 
-Because we haven't set up yet mTLS `STRICT` in our Mesh, running the command below will tell us about this violation:
+Because we haven't set up yet the default `deny` `AuthorizationPolicy` in our Mesh, running the command below will tell us about this violation:
 ```
-kubectl get meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls -ojsonpath='{.status.violations}'  | jq
+kubectl get defaultdenyauthorizationpolicies.constraints.gatekeeper.sh/default-deny-authorization-policies -ojsonpath='{.status.violations}'  | jq
 ```
 Output:
 ```
 [
   {
     "enforcementAction": "deny",
-    "kind": "MeshLevelStrictMtls",
-    "message": "Root namespace <istio-system> does not have a strict mTLS PeerAuthentication",
-    "name": "mesh-level-strict-mtls"
+    "kind": "DefaultDenyAuthorizationPolicies",
+    "message": "Root namespace <istio-system> does not have a default deny AuthorizationPolicy",
+    "name": "default-deny-authorization-policies"
   }
 ]
 ```
 
-Let's fix this issue by actually deploying a `PeerAuthentication` in the `istio-system` in order to give mTLS `STRICT` to the entire Mesh:
+Let's fix this issue by actually deploying this `AuthorizationPolicy` in the `istio-system` in order to deny any ingress to the entire Mesh:
 ```
 sed -i "s,root-sync/enforce-strict-mtls,root-sync/fix-strict-mtls,g" $WORK_DIR/acm-config.yaml
 gcloud beta container hub config-management apply \
