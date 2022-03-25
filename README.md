@@ -431,14 +431,86 @@ Output:
 
 Let's fix this issue by actually deploying this `AuthorizationPolicy` in the `istio-system` in order to deny any ingress to the entire Mesh:
 ```
-sed -i "s,root-sync/enforce-strict-mtls,root-sync/fix-strict-mtls,g" $WORK_DIR/acm-config.yaml
+sed -i "s,root-sync/enforce-authorization-policies,root-sync/fix-default-deny-authorization-policy,g" $WORK_DIR/acm-config.yaml
 gcloud beta container hub config-management apply \
     --membership ${CLUSTER} \
     --config $WORK_DIR/acm-config.yaml
 ```
 
 "Show in GitHub" snippet:
-- istio-system/PeerAuthentication
+- istio-system/AuthorizationPolicy
+
+Checks:
+```
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name root-sync \
+    --sync-namespace config-management-system
+kubectl get constraints
+```
+Outputs:
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                               managed_resources                                                               │
+├───────────────────────────┬──────────────────────────────────┬─────────────────────────────────────┬───────────────────┬─────────┬────────────┤
+│           GROUP           │               KIND               │                 NAME                │     NAMESPACE     │  STATUS │ CONDITIONS │
+├───────────────────────────┼──────────────────────────────────┼─────────────────────────────────────┼───────────────────┼─────────┼────────────┤
+│                           │ Namespace                        │ asm-ingress                         │                   │ Current │            │
+│                           │ Namespace                        │ gatekeeper-system                   │                   │ Current │            │
+│                           │ Namespace                        │ istio-system                        │                   │ Current │            │
+│                           │ Namespace                        │ onlineboutique                      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DefaultDenyAuthorizationPolicies │ default-deny-authorization-policies │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DestinationRuleTlsEnabled        │ destination-rule-tls-enabled        │                   │ Current │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels                │ namespace-sidecar-injection-label   │                   │ Current │            │
+│ constraints.gatekeeper.sh │ MeshLevelStrictMtls              │ mesh-level-strict-mtls              │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PeerAuthenticationStrictMtls     │ peerauthentication-strict-mtls      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation    │ pod-sidecar-injection-annotation    │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ defaultdenyauthorizationpolicies    │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ destinationruletlsenabled           │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ meshlevelstrictmtls                 │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ peerauthenticationstrictmtls        │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ podsidecarinjectionannotation       │                   │ Current │            │
+│                           │ Service                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ apps                      │ Deployment                       │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ networking.istio.io       │ Gateway                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ config.gatekeeper.sh      │ Config                           │ config                              │ gatekeeper-system │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision             │ asm-managed                         │ istio-system      │ Current │            │
+│ security.istio.io         │ PeerAuthentication               │ default                             │ istio-system      │ Current │            │
+│ configsync.gke.io         │ RepoSync                         │ repo-sync                           │ onlineboutique    │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding                      │ repo-sync                           │ onlineboutique    │ Current │            │
+└───────────────────────────┴──────────────────────────────────┴─────────────────────────────────────┴───────────────────┴─────────┴────────────┘
+...
+NAME                                                                                             ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+defaultdenyauthorizationpolicies.constraints.gatekeeper.sh/default-deny-authorization-policies   deny                 0
+
+NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+destinationruletlsenabled.constraints.gatekeeper.sh/destination-rule-tls-enabled   deny                 0
+
+NAME                                                                   ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls   deny                 0
+
+NAME                                                                                    ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+peerauthenticationstrictmtls.constraints.gatekeeper.sh/peerauthentication-strict-mtls   deny                 0
+
+NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+k8srequiredlabels.constraints.gatekeeper.sh/namespace-sidecar-injection-label   deny                 0
+
+NAME                                                                                       ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+podsidecarinjectionannotation.constraints.gatekeeper.sh/pod-sidecar-injection-annotation   deny                 0
+```
+
+But now if we access again the Ingress Gateway's public IP address, we will get an error: `RBAC: access denied`.
+```
+kubectl get svc asm-ingressgateway -n asm-ingress -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
+```
+
+That's because we deployed a default `deny` `AuthorizationPolicy` to the entire Mesh. What we need to do to fix this is actually deploying fine granular `AuthorizationPolicy` resources in order to get our solution working again:
+```
+sed -i "s,root-sync/fix-default-deny-authorization-policy,root-sync/deploy-authorization-policies,g" $WORK_DIR/acm-config.yaml
+gcloud beta container hub config-management apply \
+    --membership ${CLUSTER} \
+    --config $WORK_DIR/acm-config.yaml
+```
 
 To complete this `MeshLevelStrictMtls` `Constraint` just deployed and in order to make sure no one in your Mesh overrides this mTLS `STRICT` setup, two more `Constraints` have been deployed too:
 "Show in GitHub" snippet:
