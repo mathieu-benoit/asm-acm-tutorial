@@ -512,6 +512,83 @@ gcloud beta container hub config-management apply \
     --config $WORK_DIR/acm-config.yaml
 ```
 
+Checks:
+```
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name root-sync \
+    --sync-namespace config-management-system
+gcloud alpha anthos config sync repo describe \
+    --managed-resources all \
+    --sync-name repo-sync \
+    --sync-namespace onlineboutique
+```
+Outputs:
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                               managed_resources                                                               │
+├───────────────────────────┬──────────────────────────────────┬─────────────────────────────────────┬───────────────────┬─────────┬────────────┤
+│           GROUP           │               KIND               │                 NAME                │     NAMESPACE     │  STATUS │ CONDITIONS │
+├───────────────────────────┼──────────────────────────────────┼─────────────────────────────────────┼───────────────────┼─────────┼────────────┤
+│                           │ Namespace                        │ asm-ingress                         │                   │ Current │            │
+│                           │ Namespace                        │ gatekeeper-system                   │                   │ Current │            │
+│                           │ Namespace                        │ istio-system                        │                   │ Current │            │
+│                           │ Namespace                        │ onlineboutique                      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DefaultDenyAuthorizationPolicies │ default-deny-authorization-policies │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DestinationRuleTlsEnabled        │ destination-rule-tls-enabled        │                   │ Current │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels                │ namespace-sidecar-injection-label   │                   │ Current │            │
+│ constraints.gatekeeper.sh │ MeshLevelStrictMtls              │ mesh-level-strict-mtls              │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PeerAuthenticationStrictMtls     │ peerauthentication-strict-mtls      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation    │ pod-sidecar-injection-annotation    │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ defaultdenyauthorizationpolicies    │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ destinationruletlsenabled           │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ meshlevelstrictmtls                 │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ peerauthenticationstrictmtls        │                   │ Current │            │
+│ templates.gatekeeper.sh   │ ConstraintTemplate               │ podsidecarinjectionannotation       │                   │ Current │            │
+│                           │ Service                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│                           │ ServiceAccount                   │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ apps                      │ Deployment                       │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ networking.istio.io       │ Gateway                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ security.istio.io         │ AuthorizationPolicy              │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
+│ config.gatekeeper.sh      │ Config                           │ config                              │ gatekeeper-system │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision             │ asm-managed                         │ istio-system      │ Current │            │
+│ security.istio.io         │ AuthorizationPolicy              │ deny-all                            │ istio-system      │ Current │            │
+│ security.istio.io         │ PeerAuthentication               │ default                             │ istio-system      │ Current │            │
+│ configsync.gke.io         │ RepoSync                         │ repo-sync                           │ onlineboutique    │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding                      │ repo-sync                           │ onlineboutique    │ Current │            │
+└───────────────────────────┴──────────────────────────────────┴─────────────────────────────────────┴───────────────────┴─────────┴────────────┘
+...
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                            managed_resources                                            │
+├───────────────────┬─────────────────────┬───────────────────────┬────────────────┬─────────┬────────────┤
+│       GROUP       │         KIND        │          NAME         │   NAMESPACE    │  STATUS │ CONDITIONS │
+├───────────────────┼─────────────────────┼───────────────────────┼────────────────┼─────────┼────────────┤
+│                   │ ServiceAccount      │ adservice             │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ cartservice           │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ checkoutservice       │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ currencyservice       │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ emailservice          │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ frontend              │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ loadgenerator         │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ paymentservice        │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ productcatalogservice │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ recommendationservice │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ redis-cart            │ onlineboutique │ Current │            │
+│                   │ ServiceAccount      │ shippingservice       │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ adservice             │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ cartservice           │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ checkoutservice       │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ currencyservice       │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ emailservice          │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ frontend              │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ paymentservice        │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ productcatalogservice │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ recommendationservice │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ redis-cart            │ onlineboutique │ Current │            │
+│ security.istio.io │ AuthorizationPolicy │ shippingservice       │ onlineboutique │ Current │            │
+└───────────────────┴─────────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
+```
+
 To complete this `MeshLevelStrictMtls` `Constraint` just deployed and in order to make sure no one in your Mesh overrides this mTLS `STRICT` setup, two more `Constraints` have been deployed too:
 "Show in GitHub" snippet:
 - root-sync/enforce-strict-mtls/policies/destinationrule-tls-enabled.yaml
