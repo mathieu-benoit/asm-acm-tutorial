@@ -558,40 +558,63 @@ Outputs:
 │ rbac.authorization.k8s.io │ RoleBinding                      │ repo-sync                           │ onlineboutique    │ Current │            │
 └───────────────────────────┴──────────────────────────────────┴─────────────────────────────────────┴───────────────────┴─────────┴────────────┘
 ...
-┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                            managed_resources                                            │
-├───────────────────┬─────────────────────┬───────────────────────┬────────────────┬─────────┬────────────┤
-│       GROUP       │         KIND        │          NAME         │   NAMESPACE    │  STATUS │ CONDITIONS │
-├───────────────────┼─────────────────────┼───────────────────────┼────────────────┼─────────┼────────────┤
-│                   │ ServiceAccount      │ adservice             │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ cartservice           │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ checkoutservice       │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ currencyservice       │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ emailservice          │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ frontend              │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ loadgenerator         │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ paymentservice        │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ productcatalogservice │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ recommendationservice │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ redis-cart            │ onlineboutique │ Current │            │
-│                   │ ServiceAccount      │ shippingservice       │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ adservice             │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ cartservice           │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ checkoutservice       │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ currencyservice       │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ emailservice          │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ frontend              │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ paymentservice        │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ productcatalogservice │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ recommendationservice │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ redis-cart            │ onlineboutique │ Current │            │
-│ security.istio.io │ AuthorizationPolicy │ shippingservice       │ onlineboutique │ Current │            │
-└───────────────────┴─────────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                             managed_resources                                             │
+├─────────────────────┬─────────────────────┬───────────────────────┬────────────────┬─────────┬────────────┤
+│        GROUP        │         KIND        │          NAME         │   NAMESPACE    │  STATUS │ CONDITIONS │
+├─────────────────────┼─────────────────────┼───────────────────────┼────────────────┼─────────┼────────────┤
+│                     │ Service             │ adservice             │ onlineboutique │ Current │            │
+│                     │ Service             │ cartservice           │ onlineboutique │ Current │            │
+│                     │ Service             │ checkoutservice       │ onlineboutique │ Current │            │
+│                     │ Service             │ currencyservice       │ onlineboutique │ Current │            │
+│                     │ Service             │ emailservice          │ onlineboutique │ Current │            │
+│                     │ Service             │ frontend              │ onlineboutique │ Current │            │
+│                     │ Service             │ paymentservice        │ onlineboutique │ Current │            │
+│                     │ Service             │ productcatalogservice │ onlineboutique │ Current │            │
+│                     │ Service             │ recommendationservice │ onlineboutique │ Current │            │
+│                     │ Service             │ redis-cart            │ onlineboutique │ Current │            │
+│                     │ Service             │ shippingservice       │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ adservice             │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ cartservice           │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ checkoutservice       │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ currencyservice       │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ emailservice          │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ frontend              │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ loadgenerator         │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ paymentservice        │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ productcatalogservice │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ recommendationservice │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ redis-cart            │ onlineboutique │ Current │            │
+│                     │ ServiceAccount      │ shippingservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ adservice             │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ cartservice           │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ checkoutservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ currencyservice       │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ emailservice          │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ frontend              │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ loadgenerator         │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ paymentservice        │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ productcatalogservice │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ recommendationservice │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ redis-cart            │ onlineboutique │ Current │            │
+│ apps                │ Deployment          │ shippingservice       │ onlineboutique │ Current │            │
+│ networking.istio.io │ VirtualService      │ frontend              │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ adservice             │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ cartservice           │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ checkoutservice       │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ currencyservice       │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ emailservice          │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ frontend              │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ paymentservice        │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ productcatalogservice │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ recommendationservice │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ redis-cart            │ onlineboutique │ Current │            │
+│ security.istio.io   │ AuthorizationPolicy │ shippingservice       │ onlineboutique │ Current │            │
+└─────────────────────┴─────────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
 ```
 
-To complete this `MeshLevelStrictMtls` `Constraint` just deployed and in order to make sure no one in your Mesh overrides this mTLS `STRICT` setup, two more `Constraints` have been deployed too:
-"Show in GitHub" snippet:
-- root-sync/enforce-strict-mtls/policies/destinationrule-tls-enabled.yaml
+To conclude, you have secured your cluster and your mesh thanks to Policy Controller and Config Sync, if you navigate to Anthos > Security > Policy Audit in the Google Cloud console, you could see that both namespaces: `asm-ingress` and `onlineboutique` are now secured with mTLS `STRICT` and fine granular `AuthorizationPolicies`:
+![ASM Security Summary for OnlineBoutique apps](imgs/onlineboutique-asm-policy-summary.png)
 
 ## More resources
 
