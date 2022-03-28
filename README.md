@@ -160,7 +160,7 @@ getting 1 RepoSync and RootSync from asm-acm-tutorial-3
 └───────────────────────────┴──────────────────────┴────────────────────────────────┴────────────────┴─────────┴────────────┘
 ```
 
-As a best practice a new `ClusterRole` has been aggregated to the default [`edit` user-facing role](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles) in order to be able to managed Istio resources like `AuthorizationPolicy` and `VirtualService` within the `onlineboutique` namespace while meeting with the least-privilege requirement. --> Show snippet on GitHub (root-sync/init/repo-sync/reposync-role.yaml).
+As a best practice a new `ClusterRole` has been aggregated to the default [`edit` user-facing role](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles) in order to be able to managed Istio resources like `AuthorizationPolicy` and `VirtualService` within the `onlineboutique` namespace while meeting with the least-privilege requirement. --> Show snippet on GitHub (root-sync/init/istio-clusterrole.yaml).
 
 ## Deploy Ingress Gateway and OnlineBoutique apps
 
