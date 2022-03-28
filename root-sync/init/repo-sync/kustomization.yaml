@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
 - reposync.yaml
 - reposync-namespace.yaml
-- reposync-role.yaml
 - reposync-role-binding.yaml
 namespace: onlineboutique
