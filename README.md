@@ -326,7 +326,7 @@ Output:
 [
   {
     "enforcementAction": "deny",
-    "kind": "MeshLevelStrictMtls",
+    "kind": "AsmPeerAuthnMeshStrictMtls",
     "message": "Root namespace <istio-system> does not have a strict mTLS PeerAuthentication",
     "name": "mesh-level-strict-mtls"
   }
