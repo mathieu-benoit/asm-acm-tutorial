@@ -1,5 +1,5 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: DestinationRuleTlsEnabled
+kind: DestinationRuleTLSEnabled
 metadata:
   name: destination-rule-tls-enabled
 spec:
