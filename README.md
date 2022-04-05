@@ -320,7 +320,7 @@ gcloud beta container hub config-management apply \
 
 Because we haven't set up yet mTLS `STRICT` in our Mesh, running the command below will tell us about this violation:
 ```
-kubectl get meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls -ojsonpath='{.status.violations}'  | jq
+kubectl get asmpeerauthnmeshstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls -ojsonpath='{.status.violations}'  | jq
 ```
 Output:
 ```
