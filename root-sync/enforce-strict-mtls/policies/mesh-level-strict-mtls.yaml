@@ -1,6 +1,9 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: MeshLevelStrictMtls
+kind: AsmPeerAuthnMeshStrictMtls
 metadata:
   name: mesh-level-strict-mtls
 spec:
   enforcementAction: deny
+  parameters:
+    rootNamespace: asm-root
+    strictnessLevel: High
