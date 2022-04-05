@@ -517,91 +517,87 @@ gcloud alpha anthos config sync repo describe \
 ```
 Outputs:
 ```
-┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                               managed_resources                                                               │
-├───────────────────────────┬──────────────────────────────────┬─────────────────────────────────────┬───────────────────┬─────────┬────────────┤
-│           GROUP           │               KIND               │                 NAME                │     NAMESPACE     │  STATUS │ CONDITIONS │
-├───────────────────────────┼──────────────────────────────────┼─────────────────────────────────────┼───────────────────┼─────────┼────────────┤
-│                           │ Namespace                        │ asm-ingress                         │                   │ Current │            │
-│                           │ Namespace                        │ gatekeeper-system                   │                   │ Current │            │
-│                           │ Namespace                        │ istio-system                        │                   │ Current │            │
-│                           │ Namespace                        │ onlineboutique                      │                   │ Current │            │
-│ constraints.gatekeeper.sh │ DefaultDenyAuthorizationPolicies │ default-deny-authorization-policies │                   │ Current │            │
-│ constraints.gatekeeper.sh │ DestinationRuleTlsEnabled        │ destination-rule-tls-enabled        │                   │ Current │            │
-│ constraints.gatekeeper.sh │ K8sRequiredLabels                │ namespace-sidecar-injection-label   │                   │ Current │            │
-│ constraints.gatekeeper.sh │ MeshLevelStrictMtls              │ mesh-level-strict-mtls              │                   │ Current │            │
-│ constraints.gatekeeper.sh │ PeerAuthenticationStrictMtls     │ peerauthentication-strict-mtls      │                   │ Current │            │
-│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation    │ pod-sidecar-injection-annotation    │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate               │ defaultdenyauthorizationpolicies    │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate               │ destinationruletlsenabled           │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate               │ meshlevelstrictmtls                 │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate               │ peerauthenticationstrictmtls        │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate               │ podsidecarinjectionannotation       │                   │ Current │            │
-│                           │ Service                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
-│                           │ ServiceAccount                   │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
-│ apps                      │ Deployment                       │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
-│ networking.istio.io       │ Gateway                          │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
-│ security.istio.io         │ AuthorizationPolicy              │ asm-ingressgateway                  │ asm-ingress       │ Current │            │
-│ config.gatekeeper.sh      │ Config                           │ config                              │ gatekeeper-system │ Current │            │
-│ mesh.cloud.google.com     │ ControlPlaneRevision             │ asm-managed                         │ istio-system      │ Current │            │
-│ security.istio.io         │ AuthorizationPolicy              │ deny-all                            │ istio-system      │ Current │            │
-│ security.istio.io         │ PeerAuthentication               │ default                             │ istio-system      │ Current │            │
-│ configsync.gke.io         │ RepoSync                         │ repo-sync                           │ onlineboutique    │ Current │            │
-│ rbac.authorization.k8s.io │ RoleBinding                      │ repo-sync                           │ onlineboutique    │ Current │            │
-└───────────────────────────┴──────────────────────────────────┴─────────────────────────────────────┴───────────────────┴─────────┴────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                            managed_resources                                                            │
+├───────────────────────────┬────────────────────────────┬─────────────────────────────────────┬───────────────────┬─────────┬────────────┤
+│           GROUP           │            KIND            │                 NAME                │     NAMESPACE     │  STATUS │ CONDITIONS │
+├───────────────────────────┼────────────────────────────┼─────────────────────────────────────┼───────────────────┼─────────┼────────────┤
+│                           │ Namespace                  │ asm-ingress                         │                   │ Unknown │            │
+│                           │ Namespace                  │ gatekeeper-system                   │                   │ Unknown │            │
+│                           │ Namespace                  │ istio-system                        │                   │ Unknown │            │
+│                           │ Namespace                  │ onlineboutique                      │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ AsmAuthzPolicyDefaultDeny  │ default-deny-authorization-policies │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ AsmPeerAuthnMeshStrictMtls │ mesh-level-strict-mtls              │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ AsmPeerAuthnStrictMtls     │ peerauthentication-strict-mtls      │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ AsmSidecarInjection        │ pod-sidecar-injection-annotation    │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ DestinationRuleTLSEnabled  │ destination-rule-tls-enabled        │                   │ Unknown │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels          │ namespace-sidecar-injection-label   │                   │ Unknown │            │
+│ rbac.authorization.k8s.io │ ClusterRole                │ custom:aggregate-to-edit:istio      │                   │ Unknown │            │
+│                           │ Service                    │ asm-ingressgateway                  │ asm-ingress       │ Unknown │            │
+│                           │ ServiceAccount             │ asm-ingressgateway                  │ asm-ingress       │ Unknown │            │
+│ apps                      │ Deployment                 │ asm-ingressgateway                  │ asm-ingress       │ Unknown │            │
+│ networking.istio.io       │ Gateway                    │ asm-ingressgateway                  │ asm-ingress       │ Unknown │            │
+│ security.istio.io         │ AuthorizationPolicy        │ asm-ingressgateway                  │ asm-ingress       │ Unknown │            │
+│ config.gatekeeper.sh      │ Config                     │ config                              │ gatekeeper-system │ Unknown │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision       │ asm-managed                         │ istio-system      │ Unknown │            │
+│ security.istio.io         │ AuthorizationPolicy        │ deny-all                            │ istio-system      │ Unknown │            │
+│ security.istio.io         │ PeerAuthentication         │ default                             │ istio-system      │ Unknown │            │
+│ configsync.gke.io         │ RepoSync                   │ repo-sync                           │ onlineboutique    │ Unknown │            │
+│ rbac.authorization.k8s.io │ RoleBinding                │ repo-sync                           │ onlineboutique    │ Unknown │            │
+└───────────────────────────┴────────────────────────────┴─────────────────────────────────────┴───────────────────┴─────────┴────────────┘
 ...
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                             managed_resources                                             │
 ├─────────────────────┬─────────────────────┬───────────────────────┬────────────────┬─────────┬────────────┤
 │        GROUP        │         KIND        │          NAME         │   NAMESPACE    │  STATUS │ CONDITIONS │
 ├─────────────────────┼─────────────────────┼───────────────────────┼────────────────┼─────────┼────────────┤
-│                     │ Service             │ adservice             │ onlineboutique │ Current │            │
-│                     │ Service             │ cartservice           │ onlineboutique │ Current │            │
-│                     │ Service             │ checkoutservice       │ onlineboutique │ Current │            │
-│                     │ Service             │ currencyservice       │ onlineboutique │ Current │            │
-│                     │ Service             │ emailservice          │ onlineboutique │ Current │            │
-│                     │ Service             │ frontend              │ onlineboutique │ Current │            │
-│                     │ Service             │ paymentservice        │ onlineboutique │ Current │            │
-│                     │ Service             │ productcatalogservice │ onlineboutique │ Current │            │
-│                     │ Service             │ recommendationservice │ onlineboutique │ Current │            │
-│                     │ Service             │ redis-cart            │ onlineboutique │ Current │            │
-│                     │ Service             │ shippingservice       │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ adservice             │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ cartservice           │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ checkoutservice       │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ currencyservice       │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ emailservice          │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ frontend              │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ loadgenerator         │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ paymentservice        │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ productcatalogservice │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ recommendationservice │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ redis-cart            │ onlineboutique │ Current │            │
-│                     │ ServiceAccount      │ shippingservice       │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ adservice             │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ cartservice           │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ checkoutservice       │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ currencyservice       │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ emailservice          │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ frontend              │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ loadgenerator         │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ paymentservice        │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ productcatalogservice │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ recommendationservice │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ redis-cart            │ onlineboutique │ Current │            │
-│ apps                │ Deployment          │ shippingservice       │ onlineboutique │ Current │            │
-│ networking.istio.io │ VirtualService      │ frontend              │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ adservice             │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ cartservice           │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ checkoutservice       │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ currencyservice       │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ emailservice          │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ frontend              │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ paymentservice        │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ productcatalogservice │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ recommendationservice │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ redis-cart            │ onlineboutique │ Current │            │
-│ security.istio.io   │ AuthorizationPolicy │ shippingservice       │ onlineboutique │ Current │            │
+│                     │ Service             │ adservice             │ onlineboutique │ Unknown │            │
+│                     │ Service             │ cartservice           │ onlineboutique │ Unknown │            │
+│                     │ Service             │ checkoutservice       │ onlineboutique │ Unknown │            │
+│                     │ Service             │ currencyservice       │ onlineboutique │ Unknown │            │
+│                     │ Service             │ emailservice          │ onlineboutique │ Unknown │            │
+│                     │ Service             │ frontend              │ onlineboutique │ Unknown │            │
+│                     │ Service             │ paymentservice        │ onlineboutique │ Unknown │            │
+│                     │ Service             │ productcatalogservice │ onlineboutique │ Unknown │            │
+│                     │ Service             │ recommendationservice │ onlineboutique │ Unknown │            │
+│                     │ Service             │ redis-cart            │ onlineboutique │ Unknown │            │
+│                     │ Service             │ shippingservice       │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ adservice             │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ cartservice           │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ checkoutservice       │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ currencyservice       │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ emailservice          │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ frontend              │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ loadgenerator         │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ paymentservice        │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ productcatalogservice │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ recommendationservice │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ redis-cart            │ onlineboutique │ Unknown │            │
+│                     │ ServiceAccount      │ shippingservice       │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ adservice             │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ cartservice           │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ checkoutservice       │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ currencyservice       │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ emailservice          │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ frontend              │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ loadgenerator         │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ paymentservice        │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ productcatalogservice │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ recommendationservice │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ redis-cart            │ onlineboutique │ Unknown │            │
+│ apps                │ Deployment          │ shippingservice       │ onlineboutique │ Unknown │            │
+│ networking.istio.io │ VirtualService      │ frontend              │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ adservice             │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ cartservice           │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ checkoutservice       │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ currencyservice       │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ emailservice          │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ frontend              │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ paymentservice        │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ productcatalogservice │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ recommendationservice │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ redis-cart            │ onlineboutique │ Unknown │            │
+│ security.istio.io   │ AuthorizationPolicy │ shippingservice       │ onlineboutique │ Unknown │            │
 └─────────────────────┴─────────────────────┴───────────────────────┴────────────────┴─────────┴────────────┘
 ```
 
