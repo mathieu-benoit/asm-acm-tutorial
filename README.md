@@ -50,7 +50,7 @@ gcloud alpha container hub mesh describe
 
 ```
 gcloud beta container hub config-management enable
-gcloud beta container hub config-management describe
+gcloud beta container hub config-management status
 ```
 
 ## Create cluster
