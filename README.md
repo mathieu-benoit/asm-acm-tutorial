@@ -106,7 +106,6 @@ gcloud beta container hub config-management apply \
 Checks:
 ```
 gcloud beta container hub config-management status
-gcloud alpha container hub mesh describe
 gcloud alpha anthos config sync repo list
 gcloud alpha anthos config sync repo describe \
     --managed-resources all \
