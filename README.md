@@ -414,14 +414,14 @@ gcloud beta container hub config-management apply \
 
 Because we haven't set up yet the default `deny` `AuthorizationPolicy` in our Mesh, running the command below will tell us about this violation:
 ```
-kubectl get defaultdenyauthorizationpolicies.constraints.gatekeeper.sh/default-deny-authorization-policies -ojsonpath='{.status.violations}'  | jq
+kubectl get asmauthzpolicydefaultdeny.constraints.gatekeeper.sh/default-deny-authorization-policies -ojsonpath='{.status.violations}'  | jq
 ```
 Output:
 ```
 [
   {
     "enforcementAction": "deny",
-    "kind": "DefaultDenyAuthorizationPolicies",
+    "kind": "AsmAuthzPolicyDefaultDeny",
     "message": "Root namespace <istio-system> does not have a default deny AuthorizationPolicy",
     "name": "default-deny-authorization-policies"
   }
