@@ -607,4 +607,5 @@ To conclude, you have secured your cluster and your mesh thanks to Policy Contro
 ## More resources
 
 - Constraint template library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
+- Use Anthos Service Mesh security policy constraints: https://cloud.google.com/anthos-config-management/docs/how-to/using-asm-security-policy#config-sync
 - From edge to mesh: Exposing service mesh applications through GKE Ingress: https://cloud.google.com/architecture/exposing-service-mesh-apps-through-gke-ingress
