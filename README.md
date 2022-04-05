@@ -39,6 +39,20 @@ gcloud services enable \
     anthos.googleapis.com
 ```
 
+## Enable ASM
+
+```
+gcloud beta container hub mesh enable
+gcloud alpha container hub mesh describe
+```
+
+## Enable ACM
+
+```
+gcloud beta container hub config-management enable
+gcloud beta container hub config-management describe
+```
+
 ## Create cluster
 
 ```
@@ -56,20 +70,6 @@ gcloud container clusters create ${CLUSTER} \
 gcloud container hub memberships register ${CLUSTER} \
     --gke-cluster ${CLUSTER_ZONE}/${CLUSTER} \
     --enable-workload-identity
-```
-
-## Enable ASM
-
-```
-gcloud beta container hub mesh enable
-gcloud alpha container hub mesh describe
-```
-
-## Enable ACM
-
-```
-gcloud beta container hub config-management enable
-gcloud beta container hub config-management describe
 ```
 
 ## Initialize PoCo & ConfigSync (RootSync + RepoSync) repos
