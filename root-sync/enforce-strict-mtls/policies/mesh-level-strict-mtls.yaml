@@ -5,5 +5,4 @@ metadata:
 spec:
   enforcementAction: deny
   parameters:
-    rootNamespace: asm-root
     strictnessLevel: High
