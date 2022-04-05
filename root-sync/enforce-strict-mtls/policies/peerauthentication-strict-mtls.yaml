@@ -1,5 +1,5 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: PeerAuthenticationStrictMtls
+kind: AsmPeerAuthnStrictMtls
 metadata:
   name: peerauthentication-strict-mtls
 spec:
@@ -10,3 +10,5 @@ spec:
       - security.istio.io
       kinds:
       - PeerAuthentication
+  parameters:
+    strictnessLevel: High
