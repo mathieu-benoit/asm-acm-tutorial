@@ -282,8 +282,7 @@ Outputs:
 │                           │ Namespace                     │ istio-system                      │                │ Current │            │
 │                           │ Namespace                     │ onlineboutique                    │                │ Current │            │
 │ constraints.gatekeeper.sh │ K8sRequiredLabels             │ namespace-sidecar-injection-label │                │ Current │            │
-│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation │ pod-sidecar-injection-annotation  │                │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate            │ podsidecarinjectionannotation     │                │ Current │            │
+│ constraints.gatekeeper.sh │ AsmSidecarInjection           │ pod-sidecar-injection-annotation  │                │ Current │            │
 │                           │ Service                       │ asm-ingressgateway                │ asm-ingress    │ Current │            │
 │ apps                      │ Deployment                    │ asm-ingressgateway                │ asm-ingress    │ Current │            │
 │ networking.istio.io       │ Gateway                       │ asm-ingressgateway                │ asm-ingress    │ Current │            │
@@ -360,44 +359,42 @@ kubectl get constraints
 ```
 Outputs:
 ```
-┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                            managed_resources                                                             │
-├───────────────────────────┬───────────────────────────────┬───────────────────────────────────┬───────────────────┬─────────┬────────────┤
-│           GROUP           │              KIND             │                NAME               │     NAMESPACE     │  STATUS │ CONDITIONS │
-├───────────────────────────┼───────────────────────────────┼───────────────────────────────────┼───────────────────┼─────────┼────────────┤
-│                           │ Namespace                     │ asm-ingress                       │                   │ Current │            │
-│                           │ Namespace                     │ gatekeeper-system                 │                   │ Current │            │
-│                           │ Namespace                     │ istio-system                      │                   │ Current │            │
-│                           │ Namespace                     │ onlineboutique                    │                   │ Current │            │
-│ constraints.gatekeeper.sh │ DestinationRuleTlsEnabled     │ destination-rule-tls-enabled      │                   │ Current │            │
-│ constraints.gatekeeper.sh │ K8sRequiredLabels             │ namespace-sidecar-injection-label │                   │ Current │            │
-│ constraints.gatekeeper.sh │ MeshLevelStrictMtls           │ mesh-level-strict-mtls            │                   │ Current │            │
-│ constraints.gatekeeper.sh │ PeerAuthenticationStrictMtls  │ peerauthentication-strict-mtls    │                   │ Current │            │
-│ constraints.gatekeeper.sh │ PodSidecarInjectionAnnotation │ pod-sidecar-injection-annotation  │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate            │ destinationruletlsenabled         │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate            │ meshlevelstrictmtls               │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate            │ peerauthenticationstrictmtls      │                   │ Current │            │
-│ templates.gatekeeper.sh   │ ConstraintTemplate            │ podsidecarinjectionannotation     │                   │ Current │            │
-│                           │ Service                       │ asm-ingressgateway                │ asm-ingress       │ Current │            │
-│ apps                      │ Deployment                    │ asm-ingressgateway                │ asm-ingress       │ Current │            │
-│ networking.istio.io       │ Gateway                       │ asm-ingressgateway                │ asm-ingress       │ Current │            │
-│ config.gatekeeper.sh      │ Config                        │ config                            │ gatekeeper-system │ Current │            │
-│ mesh.cloud.google.com     │ ControlPlaneRevision          │ asm-managed                       │ istio-system      │ Current │            │
-│ security.istio.io         │ PeerAuthentication            │ default                           │ istio-system      │ Current │            │
-│ configsync.gke.io         │ RepoSync                      │ repo-sync                         │ onlineboutique    │ Current │            │
-│ rbac.authorization.k8s.io │ RoleBinding                   │ repo-sync                         │ onlineboutique    │ Current │            │
-└───────────────────────────┴───────────────────────────────┴───────────────────────────────────┴───────────────────┴─────────┴────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                           managed_resources                                                           │
+├───────────────────────────┬────────────────────────────┬───────────────────────────────────┬───────────────────┬─────────┬────────────┤
+│           GROUP           │            KIND            │                NAME               │     NAMESPACE     │  STATUS │ CONDITIONS │
+├───────────────────────────┼────────────────────────────┼───────────────────────────────────┼───────────────────┼─────────┼────────────┤
+│                           │ Namespace                  │ asm-ingress                       │                   │ Current │            │
+│                           │ Namespace                  │ gatekeeper-system                 │                   │ Current │            │
+│                           │ Namespace                  │ istio-system                      │                   │ Current │            │
+│                           │ Namespace                  │ onlineboutique                    │                   │ Current │            │
+│ constraints.gatekeeper.sh │ AsmPeerAuthnMeshStrictMtls │ mesh-level-strict-mtls            │                   │ Current │            │
+│ constraints.gatekeeper.sh │ AsmPeerAuthnStrictMtls     │ peerauthentication-strict-mtls    │                   │ Current │            │
+│ constraints.gatekeeper.sh │ AsmSidecarInjection        │ pod-sidecar-injection-annotation  │                   │ Current │            │
+│ constraints.gatekeeper.sh │ DestinationRuleTLSEnabled  │ destination-rule-tls-enabled      │                   │ Current │            │
+│ constraints.gatekeeper.sh │ K8sRequiredLabels          │ namespace-sidecar-injection-label │                   │ Current │            │
+│ rbac.authorization.k8s.io │ ClusterRole                │ custom:aggregate-to-edit:istio    │                   │ Current │            │
+│                           │ Service                    │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│                           │ ServiceAccount             │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ apps                      │ Deployment                 │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ networking.istio.io       │ Gateway                    │ asm-ingressgateway                │ asm-ingress       │ Current │            │
+│ config.gatekeeper.sh      │ Config                     │ config                            │ gatekeeper-system │ Current │            │
+│ mesh.cloud.google.com     │ ControlPlaneRevision       │ asm-managed                       │ istio-system      │ Current │            │
+│ security.istio.io         │ PeerAuthentication         │ default                           │ istio-system      │ Current │            │
+│ configsync.gke.io         │ RepoSync                   │ repo-sync                         │ onlineboutique    │ Current │            │
+│ rbac.authorization.k8s.io │ RoleBinding                │ repo-sync                         │ onlineboutique    │ Current │            │
+└───────────────────────────┴────────────────────────────┴───────────────────────────────────┴───────────────────┴─────────┴────────────┘
 ...
-NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
-destinationruletlsenabled.constraints.gatekeeper.sh/destination-rule-tls-enabled   deny                 
-NAME                                                                   ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
-meshlevelstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls   deny                 0
-NAME                                                                                    ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
-peerauthenticationstrictmtls.constraints.gatekeeper.sh/peerauthentication-strict-mtls   deny                 0
 NAME                                                                            ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
 k8srequiredlabels.constraints.gatekeeper.sh/namespace-sidecar-injection-label   deny                 0
-NAME                                                                                       ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
-podsidecarinjectionannotation.constraints.gatekeeper.sh/pod-sidecar-injection-annotation   deny                 0
+NAME                                                                          ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+asmpeerauthnmeshstrictmtls.constraints.gatekeeper.sh/mesh-level-strict-mtls   deny                 0
+NAME                                                                               ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+destinationruletlsenabled.constraints.gatekeeper.sh/destination-rule-tls-enabled   deny                 0
+NAME                                                                              ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+asmpeerauthnstrictmtls.constraints.gatekeeper.sh/peerauthentication-strict-mtls   deny                 0
+NAME                                                                             ENFORCEMENT-ACTION   TOTAL-VIOLATIONS
+asmsidecarinjection.constraints.gatekeeper.sh/pod-sidecar-injection-annotation   deny                 0
 ```
 
 ## Enforce AuthorizationPolicies
