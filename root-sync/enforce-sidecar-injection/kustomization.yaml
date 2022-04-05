@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
 - ../deployments
 - namespace-sidecar-injection-label.yaml
-- pod-sidecar-injection-annotation-template.yaml
 - pod-sidecar-injection-annotation.yaml
