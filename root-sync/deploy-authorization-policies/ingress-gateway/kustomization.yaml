@@ -3,11 +3,3 @@ kind: Kustomization
 components:
 - github.com/GoogleCloudPlatform/anthos-service-mesh-samples/docs/ingress-gateway-asm-manifests/with-authorization-policies?ref=asm-acm-tutorial
 namespace: asm-ingress
-patches:
-  - patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: asm-ingressgateway
-        annotations:
-          config.kubernetes.io/depends-on: mesh.cloud.google.com/namespaces/istio-system/ControlPlaneRevision/asm-managed
