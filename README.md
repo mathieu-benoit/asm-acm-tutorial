@@ -247,6 +247,10 @@ If you go through the Anthos > Service Mesh > Topology page in the Google Cloud 
 
 ## Enforce ASM sidecar injection
 
+As an admin, I should be able to enforce the policy that all workloads in the mesh should all have sidecar injected.
+
+As an admin, I should be able to enforce the policy that all workloads in the mesh should not bypass sidecar.
+
 Potential things we should show/explain/illustrate/callout in this section:
 - ASM sidecar injection: https://cloud.google.com/service-mesh/docs/anthos-service-mesh-proxy-injection
 - ASM Control Plane revisions: https://cloud.google.com/service-mesh/docs/revisions-overview
@@ -302,6 +306,8 @@ k8srequiredlabels.constraints.gatekeeper.sh/namespace-sidecar-injection-label   
 We could see that for the 2 `Constraint` resources deployed we have 0 `TOTAL-VIOLATIONS`.
 
 ## Enforce STRICT mTLS in the Mesh
+
+As an admin, I can enforce that mesh level mTLS is enforced to ensure all traffic within the mesh is mTLS.
 
 Potential things we should show/explain/illustrate/callout in this section:
 - mTLS STRICT: https://cloud.google.com/service-mesh/docs/security/security-overview#mutual_tls
@@ -399,6 +405,8 @@ asmsidecarinjection.constraints.gatekeeper.sh/pod-sidecar-injection-annotation  
 ```
 
 ## Enforce AuthorizationPolicies
+
+As an admin, I can enforce that there is a default deny authorization policy for all mesh workloads.
 
 Potential things we should show/explain/illustrate/callout in this section:
 - AuthorizationPolicies: FIXME
@@ -608,5 +616,5 @@ To conclude, you have secured your cluster and your mesh thanks to Policy Contro
 ## More resources
 
 - Constraint template library: https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library
-- Use Anthos Service Mesh security policy constraints: https://cloud.google.com/anthos-config-management/docs/how-to/using-asm-security-policy#config-sync
+- Use Anthos Service Mesh security policy constraints: https://cloud.google.com/anthos-config-management/docs/how-to/using-asm-security-policy
 - From edge to mesh: Exposing service mesh applications through GKE Ingress: https://cloud.google.com/architecture/exposing-service-mesh-apps-through-gke-ingress
